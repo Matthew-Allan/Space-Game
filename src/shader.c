@@ -1,45 +1,9 @@
 #include "shader.h"
-#include "paths.h"
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <errno.h>
-#include <string.h>
 
-// Get the contents of a file.
-char *getFileText(const char *path) {
-    // Open the file given a relative or absolute path.
-    char *abs_path = getPath(path);
-    printf("OPENING '%s'\n", abs_path);
-    FILE *file = fopen(abs_path, "r");
-    free(abs_path);
-
-    if(!file) {
-        printf("Couldn't open file; %s\n", strerror(errno));
-        return NULL;
-    }
-
-    // Get size of the file.
-    fseek(file, 0L, SEEK_END);
-    long size = ftell(file);
-    fseek(file, 0L, SEEK_SET);
-
-    // Create a buffer for the contents.
-    char *contents = (char *) malloc(size + 1);
-    if(!contents) {
-        printf("Couldn't allocate memory for file buffer.\n");
-        return NULL;
-    }
-
-    // Add the null terminator.
-    contents[size] = '\0';
-
-    // Read the contents into the buffer.
-    fread(contents, 1, size, file);
-
-    fclose(file);
-    return contents;
-}
+#include "files.h"
 
 // Compile a shader at a given path.
 int compileShader(const char *path, GLenum shader_type, GLuint *shader) {

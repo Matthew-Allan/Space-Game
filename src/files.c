@@ -1,5 +1,6 @@
 #include <stdlib.h>
-#include <stdio.h>
+#include <errno.h>
+#include <string.h>
 
 #ifdef __APPLE__
 
@@ -46,7 +47,7 @@ int catAbsPart(char *path, size_t max_len) {
 
     #else 
     
-    #error "Unsupported Operating system (paths.c)"
+    #error "Unsupported Operating system (files.c)"
 
     #endif
 
@@ -79,3 +80,41 @@ void *getPath(const char *path) {
     return abs_path;
 }
 
+// Open the file given a relative or absolute path.
+FILE *openFile(const char *rel) {
+    char *abs_path = getPath(rel);
+    FILE *file = fopen(abs_path, "r");
+    free(abs_path);
+    return file;
+}
+
+// Get the contents of a file.
+char *getFileText(const char *path) {
+    FILE *file = openFile(path);
+
+    if(!file) {
+        printf("Couldn't open file; %s\n", strerror(errno));
+        return NULL;
+    }
+
+    // Get size of the file.
+    fseek(file, 0L, SEEK_END);
+    long size = ftell(file);
+    fseek(file, 0L, SEEK_SET);
+
+    // Create a buffer for the contents.
+    char *contents = (char *) malloc(size + 1);
+    if(!contents) {
+        printf("Couldn't allocate memory for file buffer.\n");
+        return NULL;
+    }
+
+    // Add the null terminator.
+    contents[size] = '\0';
+
+    // Read the contents into the buffer.
+    fread(contents, 1, size, file);
+
+    fclose(file);
+    return contents;
+}

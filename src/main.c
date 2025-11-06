@@ -71,16 +71,29 @@ SDL_Window *createWindow() {
 // Set up a vertex array object that the game board should be rendered on.
 void setupCubeVAO() {
     float verticies[] = {
-        // Vertex pos   UV pos
-         1,  1,  0,   1, 1,   // top right
-         1, -1,  0,   1, 0,   // bottom right
-        -1, -1,  0,   0, 0,   // bottom left
-        -1,  1,  0,   0, 1    // top left 
+         1,  1, -1,
+         1, -1, -1,
+         1,  1,  1,
+         1, -1,  1,
+        -1,  1, -1,
+        -1, -1, -1,
+        -1,  1,  1,
+        -1, -1,  1
     };
 
     unsigned int indices[] = {
-        0, 1, 3,   // first triangle
-        1, 2, 3    // second triangle
+        5, 3, 1,
+        3, 8, 4,
+        7, 6, 8,
+        2, 8, 6,
+        1, 4, 2,
+        5, 2, 6,
+        5, 7, 3,
+        3, 7, 8,
+        7, 5, 6,
+        2, 4, 8,
+        1, 3, 4,
+        5, 1, 2
     };
 
     // Generate a vertex array object.
@@ -104,12 +117,10 @@ void setupCubeVAO() {
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
     // Tell the shader how to interpret the VBO.
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), 0);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *) (3 * sizeof(float)));
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
 
-    // Enable the attributes.
+    // Enable the attribute.
     glEnableVertexAttribArray(0);
-    glEnableVertexAttribArray(1);
 }
 
 // Run the game and gameloop in the given window.
