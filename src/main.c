@@ -3,6 +3,9 @@
 #include <SDL2/SDL.h>
 
 #include "shader.h"
+#include "objects.h"
+#include "camera.h"
+#include "ship.h"
 
 #define SCREEN_WIDTH 600    // Width of the screen in window points (not in pixels).
 #define SCREEN_HEIGHT 600   // Height of the screen in window points (not in pixels).
@@ -33,7 +36,7 @@ SDL_Window *createWindow() {
     // Create the SDL window.
     printf("Creating window.\n");
     SDL_Window *window = SDL_CreateWindow(
-        "SpaceGame",                                       // Window title
+        "SpaceGame",                                    // Window title
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, // Center the x and y position on the screen.
         SCREEN_WIDTH, SCREEN_HEIGHT,                    // Set height and width.
         WINDOW_FLAGS                                    // (Flags) Open window useable with OpenGL context.
@@ -68,64 +71,20 @@ SDL_Window *createWindow() {
     return window;
 }
 
-// Set up a vertex array object that the game board should be rendered on.
-void setupCubeVAO() {
-    float verticies[] = {
-         1,  1, -1,
-         1, -1, -1,
-         1,  1,  1,
-         1, -1,  1,
-        -1,  1, -1,
-        -1, -1, -1,
-        -1,  1,  1,
-        -1, -1,  1
-    };
-
-    unsigned int indices[] = {
-        5, 3, 1,
-        3, 8, 4,
-        7, 6, 8,
-        2, 8, 6,
-        1, 4, 2,
-        5, 2, 6,
-        5, 7, 3,
-        3, 7, 8,
-        7, 5, 6,
-        2, 4, 8,
-        1, 3, 4,
-        5, 1, 2
-    };
-
-    // Generate a vertex array object.
-    GLuint VAO;
-    glGenVertexArrays(1, &VAO);
-
-    // Bind the vertex array object.
-    glBindVertexArray(VAO);
-
-    // Generate buffer objects.
-    GLuint VBO, EBO;
-    glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
-
-    // Bind the virtual and element buffer objects.
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-
-    // Send the vertex and index data to the buffer objects.
-    glBufferData(GL_ARRAY_BUFFER, sizeof(verticies), verticies, GL_STATIC_DRAW);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-    // Tell the shader how to interpret the VBO.
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
-
-    // Enable the attribute.
-    glEnableVertexAttribArray(0);
+int pollEvents() {
+    SDL_Event event;
+    while(SDL_PollEvent(&event)) {
+        switch (event.type) {
+        case SDL_QUIT:
+            break;
+        }
+    }
+    return 0;
 }
 
 // Run the game and gameloop in the given window.
 int runGame(SDL_Window *window) {
-
+    glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
     // Compile the shaders into a program.
     GLuint shader;
     if(buildShader(&shader, "shaders/vert.glsl", "shaders/frag.glsl") == -1) {
@@ -133,39 +92,54 @@ int runGame(SDL_Window *window) {
     }
     glUseProgram(shader);
 
-    // Create a vertex object that covers the screen where the game is displayed.
-    setupCubeVAO();
+    Camera cam;
+    init_cam_dflt(&cam);
+
+    ShipData ship;
+    init_ship(&ship);
+
+    GLuint modlLoc = glGetUniformLocation(shader, "model");
+    GLuint viewLoc = glGetUniformLocation(shader, "view");
+    GLuint projLoc = glGetUniformLocation(shader, "projection");
+
+    VertexArrObj cubeVAO;
+    createCube(&cubeVAO);
 
     // Set the time in ms that the game starts.
     uint64_t prev_time = SDL_GetTicks64();
+    vec3 force = vec3(0, -0.000001, -0.00001);
 
     // Main game loop
     int running = 1;
     while(running) {
+        applyForce(&ship, force);
+        applyVelocity(&ship);
+
+        mat4 view;
+        cam_view(&cam, view);
+        mat4 projection = persp_mat(cam.fov, 1, 0.1, 100);
+        mat4 model = trans_mat(ship.position[vecX], ship.position[vecY], ship.position[vecZ]);
+
+        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, marr(view));
+        glUniformMatrix4fv(projLoc, 1, GL_FALSE, marr(projection));
+        glUniformMatrix4fv(modlLoc, 1, GL_FALSE, marr(model));
+
+        // Clear the screen and draw the grid to the screen.
+        glClear(GL_COLOR_BUFFER_BIT);
+        drawCube(&cubeVAO);
+
+        // Swap the buffers.
+        SDL_GL_SwapWindow(window);
+        
         // Loop until enough time has passed for the fps to be correct.
         uint64_t time_value;
         while((time_value = SDL_GetTicks64()) - prev_time < (1000 / fps)) {
-            SDL_Event event;
-            while(SDL_PollEvent(&event)) {
-                switch (event.type) {
-                case SDL_QUIT:
-                    running = 0;
-                    break;
-                }
-            }
-
+            pollEvents();
             SDL_Delay(1);
         }
         // Work out time between last frame and this one.
         // uint64_t delta_time = time_value - prev_time;
         prev_time = time_value;
-
-        // Clear the screen and draw the grid to the screen.
-        glClear(GL_COLOR_BUFFER_BIT);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-        // Swap the buffers.
-        SDL_GL_SwapWindow(window);
     }
 
     return 0;

@@ -1,5 +1,5 @@
 # General
-CORE_FILES = src/shader.c src/files.c src/main.c src/glad/glad.c
+CORE_FILES = src/shader.c src/files.c src/main.c src/glad/glad.c src/vector.c src/matrix.c
 APP_FILES = 
 FILES = $(APP_FILES) $(CORE_FILES)
 ARGS = -fdiagnostics-color=always -g -Wall -Werror -framework CoreFoundation
