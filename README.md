@@ -1,4 +1,4 @@
-## My attempt at creating SpaceGame.
+## A game set in space.
 Created with SDL2 and OpenGL in C.
 
 Currently only supports Mac. If compiling, you will need to have SDL2 installed using Homebrew.
