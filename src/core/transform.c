@@ -2,15 +2,15 @@
 
 #include <stdlib.h>
 
-void initTrans(Transform *trans, vec3 offset, Transform *parent) {
-    cpyVec3(offset, trans->offset);
-    trans->parent = parent;
-    setVec4(trans->orientation, 0, 0, 0, 1);
-}
-
-void transComponents(Transform *trans, mat3 rot, vec3 disp) {
-    cpyVec3(trans->offset, disp);
-    quatRotationMat(trans->orientation, rot);
+void transComponents(Transform *trans, quaternion rot, vec3 disp) {
+    quaternion parent_rot = vec4(0, 0, 0, 1);
+    vec3 parent_disp = vec3(0, 0, 0);
+    if(trans->parent != NULL) {
+        transComponents(trans->parent, parent_rot, parent_disp);
+    }
+    quatMltVec(parent_rot, trans->offset, disp);
+    vec3Add(disp, parent_disp, disp, 1);
+    quatMlt(parent_rot, trans->orientation, rot);
 }
 
 void outputMat(mat3 rot, vec3 disp, mat4 mat) {
@@ -27,18 +27,44 @@ void outputMat(mat3 rot, vec3 disp, mat4 mat) {
 }
 
 void invTransMat(Transform *trans, mat4 mat) {
-    mat3 rotation; vec3 displacement;
+    quaternion rotation; vec3 displacement;
     transComponents(trans, rotation, displacement);
-    mat3Transpose(rotation, rotation, 1);
-    mat3MltVec(rotation, displacement, displacement, 1);
+    quatConj(rotation, rotation);
+    
+    quatMltVec(rotation, displacement, displacement);
     vec3MltSlr(displacement, -1, displacement, 1);
+    
+    mat3 rot_mat;
+    quatRotationMat(rotation, rot_mat);
 
-    outputMat(rotation, displacement, mat);
+    outputMat(rot_mat, displacement, mat);
 }
 
 void transMat(Transform *trans, mat4 mat) {
-    mat3 rotation; vec3 displacement;
+    quaternion rotation; vec3 displacement;
     transComponents(trans, rotation, displacement);
 
-    outputMat(rotation, displacement, mat);
+    mat3 rot_mat;
+    quatRotationMat(rotation, rot_mat);
+
+    outputMat(rot_mat, displacement, mat);
+}
+
+void initTrans(Transform *trans, vec3 offset, Transform *parent) {
+    cpyVec3(offset, trans->offset);
+    trans->parent = parent;
+    setVec4(trans->orientation, 0, 0, 0, 1);
+}
+
+void parentTrans(Transform *trans, Transform *parent) {
+    trans->parent = parent;
+}
+
+void orphanTrans(Transform *trans) {
+    trans->parent = NULL;
+}
+
+void orphanTransAt(Transform *trans) {
+    transComponents(trans, trans->orientation, trans->offset);
+    trans->parent = NULL;
 }

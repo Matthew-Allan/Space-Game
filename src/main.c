@@ -35,12 +35,13 @@ int runGame(Program *program) {
     }
 
     Camera cam;
-    vec3 pos;
-    vec3MltSlr(BACKWARD_VEC, 5, pos, 1);
+    vec3 pos = vec3(0, 0.3, 1);
     initCam(&cam, pos);
 
     ShipData ship;
     initShip(&ship);
+
+    parentTrans(&cam.trans, &ship.trans);
 
     VertexArrObj cubeVAO;
     createCube(&cubeVAO);
@@ -55,8 +56,10 @@ int runGame(Program *program) {
         applyVelocity(&ship);
 
         quaternion rotation;
-        float angle = 0.001f * program->delta_time;
-        quatFromEuler(rotation, angle, 0, 0);
+        float angle = 0.0003f * program->delta_time;
+        quatFromEuler(rotation, 0, angle, 0);
+        quatMlt(cam.trans.orientation, rotation, cam.trans.orientation);
+        quatFromEuler(rotation, angle, angle, angle);
         quatMlt(ship.trans.orientation, rotation, ship.trans.orientation);
 
         uploadCamMat(&cam, shader.cam);

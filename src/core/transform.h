@@ -13,5 +13,8 @@ typedef struct Transform {
 void transMat(Transform *trans, mat4 mat);
 void invTransMat(Transform *trans, mat4 mat);
 void initTrans(Transform *trans, vec3 offset, Transform *parent);
+void parentTrans(Transform *trans, Transform *parent);
+void orphanTrans(Transform *trans);
+void orphanTransAt(Transform *trans);
 
 #endif

@@ -33,6 +33,20 @@ void quatRotationMat(quaternion quat, mat3 mat) {
 }
 
 void quatConj(quaternion quat, quaternion out) {
-    cpyVec4(quat, out);
+    vec4MltSlr(quat, -1, out, 1);
     out[vecW] *= -1;
+}
+
+void quatMltVec(quaternion quat, vec3 vec, vec3 out) {
+    quaternion pure_quat;
+    cpyVec3(vec, pure_quat);
+    pure_quat[vecW] = 0;
+
+    quatMlt(quat, pure_quat, pure_quat);
+
+    quatConj(quat, quat);
+    quatMlt(pure_quat, quat, pure_quat);
+    quatConj(quat, quat);
+
+    cpyVec3(pure_quat, out);
 }

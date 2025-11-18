@@ -9,6 +9,7 @@ void quatRotationMat(quaternion quat, mat3 mat);
 void quatFromEuler(quaternion quat, float x, float y, float z);
 void quatMlt(quaternion quat_a, quaternion quat_b, quaternion out);
 void quatConj(quaternion quat, quaternion out);
+void quatMltVec(quaternion quat, vec3 vec, vec3 out);
 
 #define quatNorm(quat, out) vec4Norm(quat, out)
 
