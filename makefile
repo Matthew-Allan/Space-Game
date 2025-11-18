@@ -1,7 +1,7 @@
 # General
-CORE_FILES = src/shader.c src/files.c src/main.c src/glad/glad.c src/vector.c src/matrix.c
-APP_FILES = 
-FILES = $(APP_FILES) $(CORE_FILES)
+CORE_FILES = src/core/camera.c src/core/files.c src/core/matrix.c src/core/program.c src/core/quaternion.c src/core/shader.c src/core/transform.c src/core/vector.c
+APP_FILES = src/main.c src/objects.c src/objectshad.c src/ship.c
+FILES = $(APP_FILES) $(CORE_FILES) src/glad/glad.c
 ARGS = -fdiagnostics-color=always -g -Wall -Werror -framework CoreFoundation
 INCLUDES = -Iinclude -lSDL2
 PROG_NAME = SpaceGame

@@ -1,8 +1,8 @@
 #version 330 core
-in vec2 f_tex_pos;
+in float f_bright;
 
 out vec4 col;
 
 void main() {
-    col = vec4(0, 1, 1, 1);
+    col = vec4(0, 1, 1, 1) * ((f_bright + 1) / 2);
 }

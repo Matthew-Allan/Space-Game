@@ -1,0 +1,18 @@
+#ifndef OBJECT_SHAD_H
+#define OBJECT_SHAD_H
+
+#include <glad/glad.h>
+
+typedef struct ObjectShader {
+    GLuint program;
+    GLuint model;
+    GLuint cam;
+} ObjectShader;
+
+#define FRAG_SHADER_PATH "shaders/frag.glsl"
+#define VERT_SHADER_PATH "shaders/vert.glsl"
+
+int buildObjectShader(ObjectShader *shader);
+void useShader(ObjectShader *shader);
+
+#endif
