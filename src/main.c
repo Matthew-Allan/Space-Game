@@ -35,13 +35,16 @@ int runGame(Program *program) {
     }
 
     Camera cam;
-    vec3 pos = vec3(0, 0.3, 1);
+    vec3 pos = vec3(0, 0, 10);
     initCam(&cam, pos);
 
     ShipData ship;
     initShip(&ship);
 
-    parentTrans(&cam.trans, &ship.trans);
+    ShipData child;
+    initShip(&child);
+    parentTrans(&child.trans, &ship.trans);
+    child.trans.offset[vecY] = 1;
 
     VertexArrObj cubeVAO;
     createCube(&cubeVAO);
@@ -57,8 +60,6 @@ int runGame(Program *program) {
 
         quaternion rotation;
         float angle = 0.0003f * program->delta_time;
-        quatFromEuler(rotation, 0, angle, 0);
-        quatMlt(cam.trans.orientation, rotation, cam.trans.orientation);
         quatFromEuler(rotation, angle, angle, angle);
         quatMlt(ship.trans.orientation, rotation, ship.trans.orientation);
 
@@ -68,6 +69,8 @@ int runGame(Program *program) {
         // Clear the screen and draw the grid to the screen.
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         useShader(&shader);
+        drawCube(&cubeVAO);
+        uploadShipMat(&child, shader.model);
         drawCube(&cubeVAO);
 
         // Swap the buffers.

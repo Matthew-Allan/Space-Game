@@ -11,5 +11,5 @@ void main() {
     vec4 pos = vec4(v_pos, 1.0);
     pos.y = 0.2 * pos.y;
     gl_Position = cam * model * pos;
-    f_bright = dot(vec3(0.0, 1.0, 0.0), vec3(model * vec4(v_norm, 1.0)));
+    f_bright = dot(vec3(0.0, 1.0, 0.0), normalize(transpose(inverse(mat3(model))) * v_norm));
 }
