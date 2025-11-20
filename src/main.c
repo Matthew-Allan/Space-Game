@@ -5,6 +5,7 @@
 
 #include "objects.h"
 #include "objectshad.h"
+#include "beltshad.h"
 #include "ship.h"
 
 int pollEvents(Program *program) {
@@ -24,27 +25,30 @@ int runGame(Program *program) {
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
-
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
 
     // Compile the shaders into a program.
-    ObjectShader shader;
-    if(buildObjectShader(&shader) == -1) {
+    ObjectShader obj_shader;
+    if(buildObjectShader(&obj_shader) == -1) {
+        return -1;
+    }
+    BeltShader belt_shader;
+    if(buildBeltShader(&belt_shader) == -1) {
         return -1;
     }
 
     Camera cam;
-    vec3 pos = vec3(0, 0, 10);
+    vec3 pos = vec3(0, 3, 900);
     initCam(&cam, pos);
+    quatFromEuler(cam.trans.orientation, 0, -M_PI_4 / 2, 0);
 
     ShipData ship;
     initShip(&ship);
-
-    ShipData child;
-    initShip(&child);
-    parentTrans(&child.trans, &ship.trans);
-    child.trans.offset[vecY] = 1;
+    
+    Transform orbit;
+    initTrans(&orbit, ORIGIN_VEC, NULL);
+    parentTrans(&cam.trans, &orbit);
 
     VertexArrObj cubeVAO;
     createCube(&cubeVAO);
@@ -58,20 +62,23 @@ int runGame(Program *program) {
         applyForce(&ship, force);
         applyVelocity(&ship);
 
-        quaternion rotation;
-        float angle = 0.0003f * program->delta_time;
-        quatFromEuler(rotation, angle, angle, angle);
-        quatMlt(ship.trans.orientation, rotation, ship.trans.orientation);
+        // quaternion rotation;
+        float angle = 0.00003f * program->prev_time;
+        quatFromEuler(ship.trans.orientation, angle, angle, angle);
+        quatFromEuler(orbit.orientation, 0, angle, 0);
 
-        uploadCamMat(&cam, shader.cam);
-        uploadShipMat(&ship, shader.model);
+        // quatMlt(ship.trans.orientation, rotation, ship.trans.orientation);
 
         // Clear the screen and draw the grid to the screen.
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        useShader(&shader);
+        glUseProgram(obj_shader.program);
+        uploadCamMat(&cam, obj_shader.cam);
+        uploadShipMat(&ship, obj_shader.model);
         drawCube(&cubeVAO);
-        uploadShipMat(&child, shader.model);
-        drawCube(&cubeVAO);
+
+        glUseProgram(belt_shader.program);
+        uploadCamMat(&cam, belt_shader.cam);
+        drawCubes(&cubeVAO, 100000);
 
         // Swap the buffers.
         SDL_GL_SwapWindow(program->window);

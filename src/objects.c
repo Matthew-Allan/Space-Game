@@ -76,3 +76,8 @@ void drawCube(VertexArrObj *cubeVAO) {
     glBindVertexArray(cubeVAO->id);
     glDrawArrays(GL_TRIANGLES, 0, 36);
 }
+
+void drawCubes(VertexArrObj *cubeVAO, size_t count) {
+    glBindVertexArray(cubeVAO->id);
+    glDrawArraysInstanced(GL_TRIANGLES, 0, 36, count);
+}

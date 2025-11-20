@@ -37,13 +37,17 @@ int compileShader(const char *path, GLenum shader_type, GLuint *shader) {
 }
 
 // Build a shader given a path to the vertex and fragment shader source files.
-int buildShader(GLuint *id, const char* vert_path, const char* frag_path) {
+int buildShader(GLuint *id, const char* vert_path, const char* frag_path, const char* geom_path) {
     // Compile the vertex and fragment shaders.
-    GLuint vert_shad, frag_shad;
+    GLuint vert_shad, frag_shad, geom_shad;
     if(
         compileShader(vert_path, GL_VERTEX_SHADER, &vert_shad) < 0 ||
         compileShader(frag_path, GL_FRAGMENT_SHADER, &frag_shad) < 0
     ) {
+        return -1;
+    }
+
+    if(geom_path != NULL && compileShader(geom_path, GL_GEOMETRY_SHADER, &geom_shad) < 0) {
         return -1;
     }
 
@@ -53,6 +57,9 @@ int buildShader(GLuint *id, const char* vert_path, const char* frag_path) {
     // Attach and link the shaders in the program.
     glAttachShader(*id, vert_shad);
     glAttachShader(*id, frag_shad);
+    if(geom_path != NULL) {
+        glAttachShader(*id, geom_shad);
+    }
     glLinkProgram(*id);
 
     // Check for errors.
@@ -68,6 +75,9 @@ int buildShader(GLuint *id, const char* vert_path, const char* frag_path) {
     // Clear up the shaders.
     glDeleteShader(vert_shad);
     glDeleteShader(frag_shad);
+    if(geom_path != NULL) {
+        glDeleteShader(geom_shad);
+    }
 
     return 0;
 }

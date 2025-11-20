@@ -13,6 +13,5 @@ typedef struct ObjectShader {
 #define VERT_SHADER_PATH "shaders/vert.glsl"
 
 int buildObjectShader(ObjectShader *shader);
-void useShader(ObjectShader *shader);
 
 #endif

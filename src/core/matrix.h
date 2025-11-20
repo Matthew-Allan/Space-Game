@@ -58,10 +58,10 @@ typedef matmn(4, 4, mat4);
 )
 
 #define perspMat(fov, aspect, near, far) mat4( \
-    vec4(1.f / (aspect * tanf(fov / 2)), 0, 0, 0), \
-    vec4(0, 1.f / tanf(fov / 2), 0, 0), \
-    vec4(0, 0, (far + near) / (near - far), -1), \
-    vec4(0, 0, (2 * far * near) / (near - far), 0) \
+    vec4(1.f / (aspect * tanf(fov / 2.f)), 0, 0, 0), \
+    vec4(0, 1.f / tanf(fov / 2.f), 0, 0), \
+    vec4(0, 0, -(far + near) / (float) (far - near), -1.f), \
+    vec4(0, 0, -(2.f * far * near) / (far - near), 0) \
 )
 
 #define marr(mat) ((float *) (mat))
