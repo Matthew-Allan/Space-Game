@@ -39,9 +39,9 @@ int runGame(Program *program) {
     }
 
     Camera cam;
-    vec3 pos = vec3(0, 3, 900);
+    vec3 pos = vec3(0, 100, 900);
     initCam(&cam, pos);
-    quatFromEuler(cam.trans.orientation, 0, -M_PI_4 / 2, 0);
+    quatFromEuler(cam.trans.orientation, 0, -M_PI_4 / 1.45, 0);
 
     ShipData ship;
     initShip(&ship);
@@ -63,7 +63,7 @@ int runGame(Program *program) {
         applyVelocity(&ship);
 
         // quaternion rotation;
-        float angle = 0.00003f * program->prev_time;
+        float angle = 0.0003f * program->prev_time;
         quatFromEuler(ship.trans.orientation, angle, angle, angle);
         quatFromEuler(orbit.orientation, 0, angle, 0);
 

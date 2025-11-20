@@ -31,8 +31,16 @@ vec3 getCol(uint seed) {
     );
 }
 
-float brightness() {
-    return ((dot(vec3(0.0, 1.0, 0.0), v_norm) + 1) / 2);
+float brightness(mat3 rotation) {
+    return ((dot(normalize(vec3(0.0, 1.0, 0.0)), rotation * v_norm) + 1) / 2);
+}
+
+mat3 quatRot(vec4 q) {
+    return mat3(1) + 2.0 * mat3(
+        vec3(-q.y*q.y-q.z*q.z,  q.x*q.y-q.z*q.w,  q.x*q.z+q.y*q.w),
+        vec3( q.x*q.y+q.z*q.w, -q.x*q.x-q.z*q.z,  q.y*q.z-q.x*q.w),
+        vec3( q.x*q.z-q.y*q.w,  q.y*q.z+q.x*q.w, -q.x*q.x-q.y*q.y)
+    );
 }
 
 vec3 getOffset(uint seed) {
@@ -43,8 +51,9 @@ vec3 getOffset(uint seed) {
 
 void main() {
     uint seed = iHash(uint(gl_InstanceID));
-    vec4 pos = vec4(v_pos + getOffset(seed), 1.0);
+    vec4 quat = normalize(vec4(fHash(seed * 3211u), fHash(seed * 23211u), fHash(seed * 33211u), fHash(seed * 73211u)));
+    mat3 rotation = quatRot(quat);
+    vec4 pos = vec4(rotation * v_pos + getOffset(seed), 1.0);
     gl_Position = cam * pos;
-
-    f_col = getCol(seed) * brightness();
+    f_col = getCol(seed) * brightness(rotation);
 }
