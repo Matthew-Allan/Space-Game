@@ -60,13 +60,26 @@ int createProgram(Program *program) {
     return program->window == NULL ? -1 : 0;
 }
 
+float getFps(uint64_t *current_time, Program *program) {
+    *current_time = SDL_GetTicks64();
+    program->delta_time = *current_time - program->prev_time;
+    if(program->delta_time == 0) {
+        return fps + 1;
+    }
+    program->frames = 1000.f / program->delta_time;
+    return program->frames;
+}
+
 // Loop until enough time has passed for the fps to be correct.
 void waitForFrame(Program *program) {
     uint64_t time_value;
-    while((time_value = SDL_GetTicks64()) - program->prev_time < (1000 / fps)) {
+    #if cap_fps==1
+    while(getFps(&time_value, program) > fps) {
         SDL_Delay(1);
     }
+    #else
+    getFps(&time_value, program);
+    #endif
     // Work out time between last frame and this one.
-    program->delta_time = time_value - program->prev_time;
     program->prev_time = time_value;
 }

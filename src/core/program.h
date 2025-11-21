@@ -11,6 +11,7 @@ typedef struct Program {
     SDL_Window *window;
     uint64_t prev_time;
     uint64_t delta_time;
+    float frames;
     int running;
 } Program;
 

@@ -12,3 +12,4 @@
 
 // Set the target FPS.
 #define fps 60
+#define cap_fps 1
