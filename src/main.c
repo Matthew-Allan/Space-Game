@@ -43,8 +43,8 @@ int runGame(Program *program) {
     initCam(&cam, pos);
     quatFromEuler(cam.trans.orientation, 0, -M_PI_4 / 1.45, 0);
 
-    ShipData ship;
-    initShip(&ship);
+    Transform planet;
+    initTrans(&planet, ORIGIN_VEC, NULL);
     
     Transform orbit;
     initTrans(&orbit, ORIGIN_VEC, NULL);
@@ -53,27 +53,20 @@ int runGame(Program *program) {
     VertexArrObj cubeVAO;
     createCube(&cubeVAO);
 
-    vec3 force = vec3(0, 0, 0);
-
     // Main game loop
     while(program->running) {
         pollEvents(program);
 
-        applyForce(&ship, force);
-        applyVelocity(&ship);
-
-        // quaternion rotation;
         float angle = 0.0003f * program->prev_time;
-        quatFromEuler(ship.trans.orientation, angle, angle, angle);
+        quatFromEuler(planet.orientation, angle, angle, angle);
         quatFromEuler(orbit.orientation, 0, angle, 0);
-
-        // quatMlt(ship.trans.orientation, rotation, ship.trans.orientation);
 
         // Clear the screen and draw the grid to the screen.
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glUseProgram(obj_shader.program);
         uploadCamMat(&cam, obj_shader.cam);
-        uploadShipMat(&ship, obj_shader.model);
+        
+        uploadTransMat(&planet, obj_shader.model);
         drawCube(&cubeVAO);
 
         glUseProgram(belt_shader.program);

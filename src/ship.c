@@ -14,9 +14,3 @@ void initShip(ShipData *ship) {
     initTrans(&ship->trans, ORIGIN_VEC, NULL);
     setVec3(ship->velocity, 0, 0, 0);
 }
-
-void uploadShipMat(ShipData *ship, GLuint modelLoc) {
-    mat4 model;
-    transMat(&ship->trans, model);
-    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, marr(model));
-}

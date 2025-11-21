@@ -56,6 +56,12 @@ void initTrans(Transform *trans, vec3 offset, Transform *parent) {
     setVec4(trans->orientation, 0, 0, 0, 1);
 }
 
+void uploadTransMat(Transform *trans, GLuint modelLoc) {
+    mat4 model;
+    transMat(trans, model);
+    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, marr(model));
+}
+
 void parentTrans(Transform *trans, Transform *parent) {
     trans->parent = parent;
 }
