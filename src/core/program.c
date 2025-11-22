@@ -40,24 +40,26 @@ SDL_Window *createWindow() {
         return NULL;
     }
 
-    // Set viewport to the correct width and height.
-    int width, height;
-    SDL_GetWindowSizeInPixels(window, &width, &height);
-    glViewport(0, 0, height, width);
-
-    // Set clear colour to black.
-    glClearColor(0, 0, 0, 1.0f);
-
     // Return a pointer to the window.
     return window;
 }
 
+void updateViewport(Program *program) {
+    SDL_GetWindowSizeInPixels(program->window, &program->width, &program->height);
+    glViewport(0, 0, program->width, program->height);
+}
+
 int createProgram(Program *program) {
     program->window = createWindow();
+    if(program->window == NULL) {
+        return -1;
+    }
+    updateViewport(program);
     program->running = 1;
     program->delta_time = 0;
     program->prev_time = SDL_GetTicks64();
-    return program->window == NULL ? -1 : 0;
+    program->fullscreen = 1;
+    return 0;
 }
 
 float getFps(uint64_t *current_time, Program *program) {
@@ -68,6 +70,18 @@ float getFps(uint64_t *current_time, Program *program) {
     }
     program->frames = 1000.f / program->delta_time;
     return program->frames;
+}
+
+void setFullscreen(Program *program, int fullscreen) {
+    if(program->fullscreen == fullscreen) {
+        return;
+    }
+    SDL_SetWindowFullscreen(program->window, fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
+    program->fullscreen = fullscreen;
+}
+
+void toggleFullscreen(Program *program) {
+    setFullscreen(program, !program->fullscreen);
 }
 
 // Loop until enough time has passed for the fps to be correct.

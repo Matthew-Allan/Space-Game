@@ -14,6 +14,6 @@ typedef struct Camera {
 
 void initCam(Camera *cam, vec3 pos);
 
-void uploadCamMat(Camera *cam, GLuint camLoc);
+void uploadCamMat(Camera *cam, GLuint camLoc, float aspect);
 
 #endif

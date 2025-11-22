@@ -7,11 +7,11 @@ void initCam(Camera *cam, vec3 pos) {
     initTrans(&cam->trans, pos, NULL);
 }
 
-void uploadCamMat(Camera *cam, GLuint camLoc) {
+void uploadCamMat(Camera *cam, GLuint camLoc, float aspect) {
     mat4 cam_mat;
     invTransMat(&cam->trans, cam_mat);
 
-    mat4 projection = perspMat(cam->fov, 1, 1, 10000);
+    mat4 projection = perspMat(cam->fov, aspect, 1, 10000);
     mat4Mlt(projection, cam_mat, cam_mat, 1);
 
     glUniformMatrix4fv(camLoc, 1, GL_FALSE, marr(cam_mat));

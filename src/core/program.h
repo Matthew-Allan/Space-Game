@@ -12,11 +12,17 @@ typedef struct Program {
     uint64_t prev_time;
     uint64_t delta_time;
     float frames;
-    int running;
+    int width;
+    int height;
+    int running : 1;
+    int fullscreen : 1;
 } Program;
 
 SDL_Window *createWindow();
 int createProgram(Program *program);
 void waitForFrame(Program *program);
+void updateViewport(Program *program);
+void setFullscreen(Program *program, int fullscreen);
+void toggleFullscreen(Program *program);
 
 #endif

@@ -15,6 +15,14 @@ int pollEvents(Program *program) {
         case SDL_QUIT:
             program->running = 0;
             break;
+        case SDL_WINDOWEVENT:
+            if(event.window.event == SDL_WINDOWEVENT_RESIZED) {
+                updateViewport(program);
+            }
+        case SDL_KEYDOWN:
+            if(event.key.keysym.scancode == SDL_SCANCODE_P) {
+                toggleFullscreen(program);
+            }
         }
     }
     return 0;
@@ -41,6 +49,9 @@ int runGame(Program *program) {
     glDepthFunc(GL_LESS);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
+
+    // Set clear colour to black.
+    glClearColor(0.05, 0.05, 0.05, 1.0f);
 
     // Compile the shaders into a program.
     ObjectShader obj_shader;
@@ -81,11 +92,13 @@ int runGame(Program *program) {
         handleInput(&ship, getInputFlags(keystate), program->delta_time);
         applyVelocity(&ship);
 
+        float aspect = (float) program->width / program->height;
+
         // Clear the screen and draw the grid to the screen.
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         glUseProgram(obj_shader.program);
-        uploadCamMat(&cam, obj_shader.cam);
+        uploadCamMat(&cam, obj_shader.cam, aspect);
         
         // Draw planet.
         uploadTransMat(&planet, obj_shader.model);
@@ -93,7 +106,7 @@ int runGame(Program *program) {
 
         // Draw asteroids.
         glUseProgram(belt_shader.program);
-        uploadCamMat(&cam, belt_shader.cam);
+        uploadCamMat(&cam, belt_shader.cam, aspect);
         drawCubes(&cubeVAO, 100000);
 
         // Swap the buffers.

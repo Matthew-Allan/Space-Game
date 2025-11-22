@@ -8,7 +8,7 @@
 #define GL_MINOR_VER 3  // The OpenGL minor version number to target.
 
 // Flags for when creating a window. Use OpenGL and allow high DPI.
-#define WINDOW_FLAGS SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI
+#define WINDOW_FLAGS SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_RESIZABLE | SDL_WINDOW_FULLSCREEN_DESKTOP
 
 // Set the target FPS.
 #define fps 60
