@@ -33,6 +33,10 @@ static vec3 LEFT_VEC = vec3(-1, 0, 0);
 
 static vec3 ORIGIN_VEC = vec3(0, 0, 0);
 
+#define X_AXIS RIGHT_VEC
+#define Y_AXIS UP_VEC
+#define Z_AXIS BACKWARD_VEC
+
 void vec2AddSlr(vec2 vec, float scalar, vec2 out, size_t count);
 void vec3AddSlr(vec3 vec, float scalar, vec3 out, size_t count);
 void vec4AddSlr(vec4 vec, float scalar, vec4 out, size_t count);
