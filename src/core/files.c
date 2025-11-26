@@ -93,7 +93,7 @@ char *getFileText(const char *path) {
     FILE *file = openFile(path);
 
     if(!file) {
-        printf("Couldn't open file; %s\n", strerror(errno));
+        printf("Couldn't open file \"%s\"\n", strerror(errno));
         return NULL;
     }
 

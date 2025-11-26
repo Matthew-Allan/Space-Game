@@ -1,5 +1,5 @@
-#ifndef OBJECTS_H
-#define OBJECTS_H
+#ifndef VOAS_H
+#define VOAS_H
 
 #include <glad/glad.h>
 #include <stddef.h>
@@ -11,10 +11,11 @@ typedef struct VertexArrObj{
     GLuint id;
     ElementBufObj ebo;
     VertexBufObj vbo;
+    int faces;
 } VertexArrObj;
 
-void createCube(VertexArrObj *cubeVAO);
-void drawCube(VertexArrObj *cubeVAO);
-void drawCubes(VertexArrObj *cubeVAO, size_t count);
+int loadVAO(VertexArrObj *station_VAO, const char *path);
+void drawVAO(VertexArrObj *VAO);
+void drawVAOInstanced(VertexArrObj *VAO, size_t count);
 
 #endif

@@ -38,21 +38,20 @@ static const vec3 *rotate_dirs[] = {
     &Y_AXIS,
     &Z_AXIS
 };
+#include <stdio.h>
 
-#define flag(flags, index) ((flags >> index) & 1)
-void handleInput(ShipData *ship, uint16_t flags, uint64_t delta_time) {
+void handleInput(ShipData *ship, SHIP_Flags flags, uint64_t delta_time) {
     float thrust_speed = delta_time / 10000.f;
     float rotate_speed = delta_time / 1000.f;
 
     for(int i = 0; i < 6; i++) {
-        if(flag(flags, i)) {
+        if(FLAG_INDEX_SET(flags, i)) {
             shipThrust(ship, varr(thrust_dirs[i]), thrust_speed);
         }
     }
-
     vec3 rotation;
     for(int i = 6; i < 12; i++) {
-        if (flag(flags, i)) {
+        if (FLAG_INDEX_SET(flags, i)) {
             vec3MltSlr(varr(rotate_dirs[i / 2 - 3]), rotate_speed * (((i % 2) * 2) - 1), rotation, 1);
             shipRotate(ship, rotation);
         }

@@ -1,6 +1,6 @@
 # General
-CORE_FILES = camera files matrix program quaternion shader transform vector
-APP_FILES = beltshad main objects objectshad ship
+CORE_FILES = camera files matrix program quaternion shader transform vector vaos wfobj
+APP_FILES = beltshad main objectshad ship
 FILES = $(foreach file,$(APP_FILES) $(foreach core_file,$(CORE_FILES), core/$(core_file)) glad/glad, src/$(file).c)
 ARGS = -fdiagnostics-color=always -g -Wall -Werror -framework CoreFoundation
 INCLUDES = -Iinclude -lSDL2
@@ -25,8 +25,10 @@ all: build run
 
 # Build the executable
 build:
+	pwd
 	mkdir -p $(OUT)
 	ln -sf ../shaders $(OUT)/
+	ln -sf ../models $(OUT)/
 	gcc $(ARGS) $(INCLUDES) $(FILES) -o $(PROG_LOC)
 
 # Run the program
@@ -47,6 +49,7 @@ mac: clean build
 	sed $(SUBS) MacOS/Info.plist > $(APP_CONTENTS)/Info.plist
 	cp MacOS/Icon.icns $(APP_RESOURCES)/$(ICON)
 	cp -R shaders $(APP_RESOURCES)/shaders
+	cp -R models $(APP_RESOURCES)/models
 	cp $(PROG_LOC) $(APP_MAC_OS)/$(PROG_NAME)
 	install_name_tool -change $(shell brew --prefix sdl2)/lib/libSDL2-2.0.0.dylib @executable_path/../Frameworks/libSDL2-2.0.0.dylib $(APP_MAC_OS)/$(PROG_NAME)
 	zip -r $(PROG_LOC).app.zip $(PROG_LOC).app

@@ -2,8 +2,9 @@
 #include "core/shader.h"
 #include "core/camera.h"
 #include "core/quaternion.h"
+#include "core/vaos.h"
+#include "core/flags.h"
 
-#include "objects.h"
 #include "objectshad.h"
 #include "beltshad.h"
 #include "ship.h"
@@ -34,8 +35,8 @@ const enum SDL_Scancode input_order[] = {
     SCD(UP), SCD(DOWN), SCD(RIGHT), SCD(LEFT), SCD(E), SCD(Q)
 };
 
-uint16_t getInputFlags(const Uint8 *keystate) {
-    uint16_t flags = 0;
+SHIP_Flags getInputFlags(const Uint8 *keystate) {
+    SHIP_Flags flags = 0;
     for(int i = 0; i < 12; i++) {
         flags |= keystate[input_order[i]] << i;
     }
@@ -74,8 +75,13 @@ int runGame(Program *program) {
     initShip(&ship);
     parentTrans(&cam.trans, &ship.trans);
 
-    VertexArrObj cubeVAO;
-    createCube(&cubeVAO);
+    VertexArrObj cube_VAO, station_VAO;
+    if(loadVAO(&cube_VAO, "models/Cube.obj") == -1) {
+        return -1;
+    }
+    if(loadVAO(&station_VAO, "models/Monkey.obj") == -1) {
+        return -1;
+    }
 
     const Uint8 *keystate;
 
@@ -102,12 +108,12 @@ int runGame(Program *program) {
         
         // Draw planet.
         uploadTransMat(&planet, obj_shader.model);
-        drawCube(&cubeVAO);
+        drawVAO(&station_VAO);
 
         // Draw asteroids.
         glUseProgram(belt_shader.program);
         uploadCamMat(&cam, belt_shader.cam, aspect);
-        drawCubes(&cubeVAO, 100000);
+        drawVAOInstanced(&cube_VAO, 20000);
 
         // Swap the buffers.
         SDL_GL_SwapWindow(program->window);
