@@ -1,3 +1,5 @@
+#ifndef CONFIG_H
+#define CONFIG_H
 
 #define PROGRAM_NAME "Space Game"
 
@@ -13,3 +15,5 @@
 // Set the target FPS.
 #define fps 60
 #define cap_fps 1
+
+#endif
