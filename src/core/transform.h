@@ -15,7 +15,7 @@ typedef struct Transform {
 void transMat(Transform *trans, mat4 mat);
 void invTransMat(Transform *trans, mat4 mat);
 
-void initTrans(Transform *trans, vec3 offset, Transform *parent);
+void initTrans(Transform *trans, const vec3 offset, Transform *parent);
 
 void uploadTransMat(Transform *trans, GLuint modelLoc);
 

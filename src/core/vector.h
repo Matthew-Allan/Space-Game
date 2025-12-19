@@ -22,16 +22,16 @@ typedef float vec4[4];
 
 #define varr(vec) ((float *) (vec))
 
-static vec3 UP_VEC = vec3(0, 1, 0);
-static vec3 DOWN_VEC = vec3(0, -1, 0);
+static const vec3 UP_VEC = vec3(0, 1, 0);
+static const vec3 DOWN_VEC = vec3(0, -1, 0);
 
-static vec3 BACKWARD_VEC = vec3(0, 0, 1);
-static vec3 FORWARD_VEC = vec3(0, 0, -1);
+static const vec3 BACKWARD_VEC = vec3(0, 0, 1);
+static const vec3 FORWARD_VEC = vec3(0, 0, -1);
 
-static vec3 RIGHT_VEC = vec3(1, 0, 0);
-static vec3 LEFT_VEC = vec3(-1, 0, 0);
+static const vec3 RIGHT_VEC = vec3(1, 0, 0);
+static const vec3 LEFT_VEC = vec3(-1, 0, 0);
 
-static vec3 ORIGIN_VEC = vec3(0, 0, 0);
+static const vec3 ORIGIN_VEC = vec3(0, 0, 0);
 
 #define X_AXIS RIGHT_VEC
 #define Y_AXIS UP_VEC
@@ -78,7 +78,7 @@ void setVec3(vec3 vec, float x, float y, float z);
 void setVec4(vec4 vec, float x, float y, float z, float w);
 
 void cpyVec2(vec2 src, vec2 dst);
-void cpyVec3(vec3 src, vec3 dst);
+void cpyVec3(const vec3 src, vec3 dst);
 void cpyVec4(vec4 src, vec4 dst);
 
 void vec2Norm(vec2 vec, vec2 out);

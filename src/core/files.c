@@ -1,3 +1,5 @@
+#include "files.h"
+
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
@@ -47,7 +49,7 @@ int catAbsPart(char *path, size_t max_len) {
 
     #else 
     
-    #error "Unsupported Operating system (files.c)"
+    // #error "Unsupported Operating system (files.c)"
 
     #endif
 
@@ -55,7 +57,7 @@ int catAbsPart(char *path, size_t max_len) {
 }
 
 // Get the absolute path of the app and add the path value to it.
-void *getPath(const char *path) {
+char *getPath(const char *path) {
     // Allocate memory for the path.
     char *abs_path = malloc(PATH_MAX);
     if(abs_path == NULL) {

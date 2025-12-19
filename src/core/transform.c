@@ -50,7 +50,7 @@ void transMat(Transform *trans, mat4 mat) {
     outputMat(rot_mat, displacement, mat);
 }
 
-void initTrans(Transform *trans, vec3 offset, Transform *parent) {
+void initTrans(Transform *trans, const vec3 offset, Transform *parent) {
     cpyVec3(offset, trans->offset);
     trans->parent = parent;
     setVec4(trans->orientation, 0, 0, 0, 1);

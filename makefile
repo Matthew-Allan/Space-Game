@@ -2,9 +2,9 @@
 CORE_FILES = camera files matrix program quaternion shader transform vector vaos wfobj
 APP_FILES = beltshad main objectshad ship
 FILES = $(foreach file,$(APP_FILES) $(foreach core_file,$(CORE_FILES), core/$(core_file)) glad/glad, src/$(file).c)
-ARGS = -fdiagnostics-color=always -g -Wall -Werror -framework CoreFoundation
-INCLUDES = -Iinclude -lSDL2
+GEN_ARGS = -fdiagnostics-color=always -g -Wall -Werror -Iinclude
 PROG_NAME = SpaceGame
+PROG_NAME_LC  = $(shell echo $(PROG_NAME) | tr A-Z a-z)
 PROG_VER = 0.0
 BUNDLE_VER = 1
 OUT = out
@@ -12,30 +12,43 @@ ASSETS = assets
 SHADERS = $(ASSETS)/shaders
 MODELS = $(ASSETS)/models
 PROG_LOC = $(OUT)/$(PROG_NAME)
+UNAME_S := $(shell uname -s)
 
-# For MAC.
-APP = $(OUT)/$(PROG_NAME).app
-APP_CONTENTS = $(APP)/Contents
-APP_RESOURCES = $(APP_CONTENTS)/Resources
-APP_FRAMEWORKS = $(APP_CONTENTS)/Frameworks
-APP_MAC_OS = $(APP_CONTENTS)/MacOS
-BUNDLE_ID = com.suityourselfgames.spacegame
-SOURCE_ICON = $(ASSETS)/Icon1024.png
-ICON_NAME = Icon
-ICON_SET = $(ICON_NAME).iconset
-ICON = $(ICON_NAME).icns
-SUBS = -e 's:PROG_NAME:$(PROG_NAME):' -e 's:BUNDLE_ID:$(BUNDLE_ID):' -e 's:BUNDLE_VER:$(BUNDLE_VER):' -e 's:PROG_VER:$(PROG_VER):' -e 's:ICON_FILE:$(ICON):'
+ifeq ($(UNAME_S),Darwin)
+	OS := MAC
+	ARGS = $(GEN_ARGS) -framework CoreFoundation -lSDL2
+
+	# For MAC.
+	APP = $(OUT)/$(PROG_NAME).app
+	APP_CONTENTS = $(APP)/Contents
+	APP_RESOURCES = $(APP_CONTENTS)/Resources
+	APP_FRAMEWORKS = $(APP_CONTENTS)/Frameworks
+	APP_MAC_OS = $(APP_CONTENTS)/MacOS
+	BUNDLE_ID = com.suityourselfgames.$(PROG_NAME_LC)
+	SOURCE_ICON = $(ASSETS)/Icon1024.png
+	ICON_NAME = Icon
+	ICON_SET = $(ICON_NAME).iconset
+	ICON = $(ICON_NAME).icns
+	SUBS = -e 's:PROG_NAME:$(PROG_NAME):' -e 's:BUNDLE_ID:$(BUNDLE_ID):' -e 's:BUNDLE_VER:$(BUNDLE_VER):' -e 's:PROG_VER:$(PROG_VER):' -e 's:ICON_FILE:$(ICON):'
+else ifeq ($(OS),Windows_NT)
+	OS := WIN
+	ARGS = $(GEN_ARGS) -LWindows/lib -lSDL2
+else
+	$(error "Unsupported Operating system");
+endif
 
 # Build and run the executable.
-all: build run
+all: clean build run
 
 # Build the executable.
 build:
-	pwd
 	mkdir -p $(OUT)
 	ln -sf ../assets/shaders $(OUT)/
 	ln -sf ../assets/models $(OUT)/
-	gcc $(ARGS) $(INCLUDES) $(FILES) -o $(PROG_LOC)
+ifeq ($(OS),WIN)
+	cp Windows/SDL2.dll $(OUT)/SDL2.dll
+endif
+	gcc $(FILES) $(ARGS) -o $(PROG_LOC)
 
 # Run the program.
 run:
