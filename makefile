@@ -31,7 +31,6 @@ all: build run
 
 # Build the executable.
 build:
-	pwd
 	mkdir -p $(OUT)
 	ln -sf ../assets/shaders $(OUT)/
 	ln -sf ../assets/models $(OUT)/

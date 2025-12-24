@@ -59,6 +59,7 @@ int createProgram(Program *program) {
     program->delta_time = 0;
     program->prev_time = SDL_GetTicks64();
     program->fullscreen = 1;
+    program->keystate = SDL_GetKeyboardState(NULL);
     return 0;
 }
 
@@ -96,4 +97,5 @@ void waitForFrame(Program *program) {
     #endif
     // Work out time between last frame and this one.
     program->prev_time = time_value;
+    program->keystate = SDL_GetKeyboardState(NULL);
 }

@@ -43,7 +43,6 @@ int extendVec3List(Vec3List *list) {
 
     list->data = new_data;
     list->size = new_size;
-
     return 0;
 }
 
@@ -51,7 +50,6 @@ int initVec3List(Vec3List *list) {
     list->size = 0;
     list->count = 0;
     extendVec3List(list);
-    
     return 0;
 }
 
@@ -78,6 +76,7 @@ int initOBJReader(OBJReader *reader, WF_OBJ_Flags flags) {
     if(initVec3List(&reader->vecs) == -1) {
         return -1;
     }
+    
     reader->nv = FLAGS_SET(flags, WF_OBJ_HAS_NORMS);
     reader->uv = FLAGS_SET(flags, WF_OBJ_HAS_UVS);
     reader->vecs_p_face = (1 + reader->nv + reader->uv) * 3;

@@ -3,9 +3,7 @@
 #include <string.h>
 
 #ifdef __APPLE__
-
 #include <CoreFoundation/CoreFoundation.h>
-
 #endif
 
 // Add the relative part to the path.
@@ -17,10 +15,9 @@ void catRelPart(const char *rel, char *path) {
         path++; rel++;
     }
     *path = '\0';
+    #else
 
-    #else 
     strcat(path, rel);
-
     #endif
 }
 
@@ -44,11 +41,9 @@ int catAbsPart(char *path, size_t max_len) {
     }
 
     strcat(path, "/");
-
     #else 
     
     #error "Unsupported Operating system (files.c)"
-
     #endif
 
     return 0;

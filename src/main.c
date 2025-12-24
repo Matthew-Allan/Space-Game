@@ -8,6 +8,7 @@
 #include "objectshad.h"
 #include "beltshad.h"
 #include "ship.h"
+#include "objects.h"
 
 int pollEvents(Program *program) {
     SDL_Event event;
@@ -75,27 +76,21 @@ int runGame(Program *program) {
     initShip(&ship);
     parentTrans(&cam.trans, &ship.trans);
 
-    VertexArrObj cube_VAO, station_VAO;
-    if(loadVAO(&cube_VAO, "models/Cube.obj") == -1) {
+    VertexArrObj vaos[obj_count];
+    if(loadVAOs(vaos, obj_paths, obj_count) == -1) {
         return -1;
     }
-    if(loadVAO(&station_VAO, "models/Monkey.obj") == -1) {
-        return -1;
-    }
-
-    const Uint8 *keystate;
 
     // Main game loop
     while(program->running) {
         pollEvents(program);
-        keystate = SDL_GetKeyboardState(NULL);
 
         // Rotate planet.
         float angle = 0.0003f * program->prev_time;
         quatFromEuler(planet.orientation, angle, angle, angle);
 
         // Move the ship;
-        handleInput(&ship, getInputFlags(keystate), program->delta_time);
+        handleInput(&ship, getInputFlags(program->keystate), program->delta_time);
         applyVelocity(&ship);
 
         float aspect = (float) program->width / program->height;
@@ -108,12 +103,12 @@ int runGame(Program *program) {
         
         // Draw planet.
         uploadTransMat(&planet, obj_shader.model);
-        drawVAO(&station_VAO);
+        drawVAO(&vaos[OBJ_Monkey]);
 
         // Draw asteroids.
         glUseProgram(belt_shader.program);
         uploadCamMat(&cam, belt_shader.cam, aspect);
-        drawVAOInstanced(&cube_VAO, 20000);
+        drawVAOInstanced(&vaos[OBJ_Cube], 20000);
 
         // Swap the buffers.
         SDL_GL_SwapWindow(program->window);

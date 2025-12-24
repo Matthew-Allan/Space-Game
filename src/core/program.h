@@ -9,6 +9,7 @@
 
 typedef struct Program {
     SDL_Window *window;
+    const Uint8 *keystate;
     uint64_t prev_time;
     uint64_t delta_time;
     float frames;

@@ -28,6 +28,15 @@ void setupVAO(VertexArrObj *VAO, float *verts, size_t verts_size, GLuint *inds, 
     VAO->faces = face_cnt;
 }
 
+int loadVAOs(VertexArrObj *station_VAOs, const char **paths, size_t count) {
+    for(size_t i = 0; i < count; i++) {
+        if(loadVAO(&station_VAOs[i], paths[i]) == -1) {
+            return -1;
+        }
+    }
+    return 0;
+}
+
 int loadVAO(VertexArrObj *station_VAO, const char *path) {
     size_t size, faces;
     float *geom = loadObjectData(path, WF_OBJ_HAS_NORMS, &size, &faces);
