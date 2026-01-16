@@ -28,6 +28,7 @@ ifeq ($(UNAME_S),Darwin)
 
 # General vals.
 OS := MAC
+BUILD_RES := build-res/MacOS
 ARGS := $(GEN_ARGS) -framework CoreFoundation
 
 # .app package folders.
@@ -49,7 +50,8 @@ else ifeq ($(OS),Windows_NT)
 
 # General vals.
 OS := WIN
-ARGS := $(GEN_ARGS) -LWindows/lib
+BUILD_RES := build-res/Windows
+ARGS := $(GEN_ARGS) -L$(BUILD_RES)/lib
 
 else
 
@@ -59,7 +61,6 @@ endif
 
 # Build and run the executable.
 all: build run
-	echo $(BUNDLE_ID)
 
 # Build the executable.
 build: clean
@@ -67,7 +68,7 @@ build: clean
 	ln -sf ../assets/shaders $(OUT)/
 	ln -sf ../assets/models $(OUT)/
 ifeq ($(OS),WIN)
-	cp Windows/SDL2.dll $(OUT)/SDL2.dll
+	cp $(BUILD_RES)/SDL2.dll $(OUT)/SDL2.dll
 endif
 	gcc $(FILES) $(ARGS) -o $(PROG_LOC)
 
@@ -87,10 +88,10 @@ mac: clean build
 	mkdir $(APP_FRAMEWORKS)
 
 # Place files in the package.
-	cp MacOS/libSDL2-2.0.0.dylib $(APP_FRAMEWORKS)/libSDL2-2.0.0.dylib
-	cp MacOS/Info.plist $(APP_CONTENTS)/Info.plist
-	sed $(SUBS) MacOS/Info.plist > $(APP_CONTENTS)/Info.plist
-	cp MacOS/Icon.icns $(APP_RESOURCES)/$(ICON)
+	cp $(BUILD_RES)/libSDL2-2.0.0.dylib $(APP_FRAMEWORKS)/libSDL2-2.0.0.dylib
+	cp $(BUILD_RES)/Info.plist $(APP_CONTENTS)/Info.plist
+	sed $(SUBS) $(BUILD_RES)/Info.plist > $(APP_CONTENTS)/Info.plist
+	cp $(BUILD_RES)/Icon.icns $(APP_RESOURCES)/$(ICON)
 	cp -R $(SHADERS) $(APP_RESOURCES)/shaders
 	cp -R $(MODELS) $(APP_RESOURCES)/models
 	cp $(PROG_LOC) $(APP_MAC_OS)/$(PROG_NAME)
@@ -116,5 +117,5 @@ icns:
 	sips -z 512 512   $(SOURCE_ICON) --out $(ICON_SET)/icon_256x256@2x.png
 	sips -z 512 512   $(SOURCE_ICON) --out $(ICON_SET)/icon_512x512.png
 	cp $(SOURCE_ICON) $(ICON_SET)/icon_512x512@2x.png
-	iconutil -c icns $(ICON_SET) -o MacOS/$(ICON)
+	iconutil -c icns $(ICON_SET) -o $(BUILD_RES)/$(ICON)
 	rm -r $(ICON_SET)
