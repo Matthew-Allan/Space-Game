@@ -12,8 +12,8 @@ typedef struct Camera {
     float fov;
 } Camera;
 
-void initCam(Camera *cam, vec3 pos);
+void initCam(Camera *cam, const vec3 pos);
 
-void uploadCamMat(Camera *cam, GLuint camLoc, float aspect);
+void uploadCamMat(const Camera *cam, GLuint camLoc, float aspect);
 
 #endif

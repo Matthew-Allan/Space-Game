@@ -37,7 +37,7 @@ int compileShader(const char *path, GLenum shader_type, GLuint *shader) {
 }
 
 // Build a shader given a path to the vertex and fragment shader source files.
-int buildShader(GLuint *id, const char* vert_path, const char* frag_path, const char* geom_path) {
+int buildShader(GLuint *id, const char *vert_path, const char *frag_path, const char *geom_path) {
     // Compile the vertex and fragment shaders.
     GLuint vert_shad, frag_shad, geom_shad;
     if(

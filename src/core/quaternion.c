@@ -5,7 +5,7 @@
 #define MPRT(a, b) (Q(quat_a, a) * Q(quat_b, b))
 #define MROW(b, c, d) (MPRT(W, b) + MPRT(b, W) + MPRT(c, d) - MPRT(d, c))
 
-void quatMlt(quaternion quat_a, quaternion quat_b, quaternion out) {
+void quatMlt(const quaternion quat_a, const quaternion quat_b, quaternion out) {
     quaternion temp;
     temp[vecX] = MROW(X, Y, Z);
     temp[vecY] = MROW(Y, Z, X);
@@ -26,27 +26,26 @@ void quatFromEuler(quaternion quat, float x, float y, float z) {
 #define OUT(a, b, opp, c, d) (2 * (Q(quat, a) * Q(quat, b) opp Q(quat, c) * Q(quat, d)))
 #define CTR(a, b) (1 - OUT(a, a, +, b, b))
 
-void quatRotationMat(quaternion quat, mat3 mat) {
+void quatRotationMat(const quaternion quat, mat3 mat) {
     setVec3(mat[matI], CTR(Y, Z),          OUT(X, Y, +, W, Z), OUT(X, Z, -, W, Y));
     setVec3(mat[matJ], OUT(X, Y, -, W, Z), CTR(X, Z),          OUT(Y, Z, +, W, X));
     setVec3(mat[matK], OUT(X, Z, +, W, Y), OUT(Y, Z, -, W, X), CTR(X, Y));
 }
 
-void quatConj(quaternion quat, quaternion out) {
+void quatConj(const quaternion quat, quaternion out) {
     vec4MltSlr(quat, -1, out, 1);
     out[vecW] *= -1;
 }
 
-void quatMltVec(quaternion quat, vec3 vec, vec3 out) {
-    quaternion pure_quat;
+void quatMltVec(const quaternion quat, const vec3 vec, vec3 out) {
+    quaternion pure_quat, conj;
     cpyVec3(vec, pure_quat);
     pure_quat[vecW] = 0;
 
     quatMlt(quat, pure_quat, pure_quat);
 
-    quatConj(quat, quat);
-    quatMlt(pure_quat, quat, pure_quat);
-    quatConj(quat, quat);
+    quatConj(quat, conj);
+    quatMlt(pure_quat, conj, pure_quat);
 
     cpyVec3(pure_quat, out);
 }

@@ -7,19 +7,19 @@
 #include "quaternion.h"
 
 typedef struct Transform {
-    struct Transform *parent;
+    const struct Transform *parent;
     quaternion orientation;
     vec3 offset;
 } Transform;
 
-void transMat(Transform *trans, mat4 mat);
-void invTransMat(Transform *trans, mat4 mat);
+void transMat(const Transform *trans, mat4 mat);
+void invTransMat(const Transform *trans, mat4 mat);
 
-void initTrans(Transform *trans, const vec3 offset, Transform *parent);
+void initTrans(Transform *trans, const vec3 offset, const Transform *parent);
 
-void uploadTransMat(Transform *trans, GLuint modelLoc);
+void uploadTransMat(const Transform *trans, GLuint modelLoc);
 
-void parentTrans(Transform *trans, Transform *parent);
+void parentTrans(Transform *trans, const Transform *parent);
 void orphanTrans(Transform *trans);
 void orphanTransAt(Transform *trans);
 

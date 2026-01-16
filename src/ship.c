@@ -6,11 +6,11 @@ void applyVelocity(ShipData *ship) {
     vec3Add(ship->trans.offset, ship->velocity, ship->trans.offset, 1);
 }
 
-void applyForce(ShipData *ship, vec3 force) {
+void applyForce(ShipData *ship, const vec3 force) {
     vec3Add(ship->velocity, force, ship->velocity, 1);
 }
 
-void shipThrust(ShipData *ship, vec3 direction, float magnitude) {
+void shipThrust(ShipData *ship, const vec3 direction, float magnitude) {
     vec3 force;
     quatMltVec(ship->trans.orientation, direction, force);
     vec3Norm(force, force);
@@ -18,7 +18,7 @@ void shipThrust(ShipData *ship, vec3 direction, float magnitude) {
     applyForce(ship, force);
 }
 
-void shipRotate(ShipData *ship, vec3 angles) {
+void shipRotate(ShipData *ship, const vec3 angles) {
     quaternion rotation;
     quatFromEuler(rotation, angles[vecX], angles[vecY], angles[vecZ]);
     quatMlt(ship->trans.orientation, rotation, ship->trans.orientation);

@@ -16,7 +16,7 @@ typedef struct VertexArrObj{
 
 int loadVAO(VertexArrObj *station_VAO, const char *path);
 int loadVAOs(VertexArrObj *station_VAOs, const char **paths, size_t count);
-void drawVAO(VertexArrObj *VAO);
-void drawVAOInstanced(VertexArrObj *VAO, size_t count);
+void drawVAO(const VertexArrObj *VAO);
+void drawVAOInstanced(const VertexArrObj *VAO, size_t count);
 
 #endif

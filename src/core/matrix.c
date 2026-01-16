@@ -11,37 +11,37 @@
         } \
     }
 
-void matmnAddSlr(float *mat, float scalar, float *out, size_t m, size_t n, size_t count) { matmnOppBdy(+ scalar, mat, out, m, n, count); }
+void matmnAddSlr(const float *mat, float scalar, float *out, size_t m, size_t n, size_t count) { matmnOppBdy(+ scalar, mat, out, m, n, count); }
 
-void mat2AddSlr(mat2 mat, float scalar, mat2 out, size_t count) { matmnAddSlr(marr(mat), scalar, marr(out), 2, 2, count); }
-void mat3AddSlr(mat3 mat, float scalar, mat3 out, size_t count) { matmnAddSlr(marr(mat), scalar, marr(out), 3, 3, count); }
-void mat4AddSlr(mat4 mat, float scalar, mat4 out, size_t count) { matmnAddSlr(marr(mat), scalar, marr(out), 4, 4, count); }
+void mat2AddSlr(const mat2 mat, float scalar, mat2 out, size_t count) { matmnAddSlr(marr(mat), scalar, marr(out), 2, 2, count); }
+void mat3AddSlr(const mat3 mat, float scalar, mat3 out, size_t count) { matmnAddSlr(marr(mat), scalar, marr(out), 3, 3, count); }
+void mat4AddSlr(const mat4 mat, float scalar, mat4 out, size_t count) { matmnAddSlr(marr(mat), scalar, marr(out), 4, 4, count); }
 
-void matmnMltSlr(float *mat, float scalar, float *out, size_t m, size_t n, size_t count) { matmnOppBdy(* scalar, mat, out, m, n, count); }
+void matmnMltSlr(const float *mat, float scalar, float *out, size_t m, size_t n, size_t count) { matmnOppBdy(* scalar, mat, out, m, n, count); }
 
-void mat2MltSlr(mat2 mat, float scalar, mat2 out, size_t count) { matmnMltSlr(marr(mat), scalar, marr(out), 2, 2, count); }
-void mat3MltSlr(mat3 mat, float scalar, mat3 out, size_t count) { matmnMltSlr(marr(mat), scalar, marr(out), 3, 3, count); }
-void mat4MltSlr(mat4 mat, float scalar, mat4 out, size_t count) { matmnMltSlr(marr(mat), scalar, marr(out), 4, 4, count); }
+void mat2MltSlr(const mat2 mat, float scalar, mat2 out, size_t count) { matmnMltSlr(marr(mat), scalar, marr(out), 2, 2, count); }
+void mat3MltSlr(const mat3 mat, float scalar, mat3 out, size_t count) { matmnMltSlr(marr(mat), scalar, marr(out), 3, 3, count); }
+void mat4MltSlr(const mat4 mat, float scalar, mat4 out, size_t count) { matmnMltSlr(marr(mat), scalar, marr(out), 4, 4, count); }
 
-void matmnDivSlr(float *mat, float scalar, float *out, size_t m, size_t n, size_t count) { matmnOppBdy(/ scalar, mat, out, m, n, count); }
+void matmnDivSlr(const float *mat, float scalar, float *out, size_t m, size_t n, size_t count) { matmnOppBdy(/ scalar, mat, out, m, n, count); }
 
-void mat2DivSlr(mat2 mat, float scalar, mat2 out, size_t count) { matmnDivSlr(marr(mat), scalar, marr(out), 2, 2, count); }
-void mat3DivSlr(mat3 mat, float scalar, mat3 out, size_t count) { matmnDivSlr(marr(mat), scalar, marr(out), 3, 3, count); }
-void mat4DivSlr(mat4 mat, float scalar, mat4 out, size_t count) { matmnDivSlr(marr(mat), scalar, marr(out), 4, 4, count); }
+void mat2DivSlr(const mat2 mat, float scalar, mat2 out, size_t count) { matmnDivSlr(marr(mat), scalar, marr(out), 2, 2, count); }
+void mat3DivSlr(const mat3 mat, float scalar, mat3 out, size_t count) { matmnDivSlr(marr(mat), scalar, marr(out), 3, 3, count); }
+void mat4DivSlr(const mat4 mat, float scalar, mat4 out, size_t count) { matmnDivSlr(marr(mat), scalar, marr(out), 4, 4, count); }
 
-void matmnAdd(float *mat_a, float *mat_b, float *out, size_t m, size_t n, size_t count) { matmnOppBdy(+ matijr(mat_b, i, j, m), mat_a, out, m, n, count); }
+void matmnAdd(const float *mat_a, const float *mat_b, float *out, size_t m, size_t n, size_t count) { matmnOppBdy(+ matijr(mat_b, i, j, m), mat_a, out, m, n, count); }
 
-void mat2Add(mat2 mat_a, mat2 mat_b, mat2 out, size_t count) { matmnAdd(marr(mat_a), marr(mat_b), marr(out), 2, 2, count); }
-void mat3Add(mat3 mat_a, mat3 mat_b, mat3 out, size_t count) { matmnAdd(marr(mat_a), marr(mat_b), marr(out), 3, 3, count); }
-void mat4Add(mat4 mat_a, mat4 mat_b, mat4 out, size_t count) { matmnAdd(marr(mat_a), marr(mat_b), marr(out), 4, 4, count); }
+void mat2Add(const mat2 mat_a, const mat2 mat_b, mat2 out, size_t count) { matmnAdd(marr(mat_a), marr(mat_b), marr(out), 2, 2, count); }
+void mat3Add(const mat3 mat_a, const mat3 mat_b, mat3 out, size_t count) { matmnAdd(marr(mat_a), marr(mat_b), marr(out), 3, 3, count); }
+void mat4Add(const mat4 mat_a, const mat4 mat_b, mat4 out, size_t count) { matmnAdd(marr(mat_a), marr(mat_b), marr(out), 4, 4, count); }
 
-void matmnSub(float *mat_a, float *mat_b, float *out, size_t m, size_t n, size_t count) { matmnOppBdy(- matijr(mat_b, i, j, m), mat_a, out, m, n, count); }
+void matmnSub(const float *mat_a, const float *mat_b, float *out, size_t m, size_t n, size_t count) { matmnOppBdy(- matijr(mat_b, i, j, m), mat_a, out, m, n, count); }
 
-void mat2Sub(mat2 mat_a, mat2 mat_b, mat2 out, size_t count) { matmnSub(marr(mat_a), marr(mat_b), marr(out), 2, 2, count); }
-void mat3Sub(mat3 mat_a, mat3 mat_b, mat3 out, size_t count) { matmnSub(marr(mat_a), marr(mat_b), marr(out), 3, 3, count); }
-void mat4Sub(mat4 mat_a, mat4 mat_b, mat4 out, size_t count) { matmnSub(marr(mat_a), marr(mat_b), marr(out), 4, 4, count); }
+void mat2Sub(const mat2 mat_a, const mat2 mat_b, mat2 out, size_t count) { matmnSub(marr(mat_a), marr(mat_b), marr(out), 2, 2, count); }
+void mat3Sub(const mat3 mat_a, const mat3 mat_b, mat3 out, size_t count) { matmnSub(marr(mat_a), marr(mat_b), marr(out), 3, 3, count); }
+void mat4Sub(const mat4 mat_a, const mat4 mat_b, mat4 out, size_t count) { matmnSub(marr(mat_a), marr(mat_b), marr(out), 4, 4, count); }
 
-void matmnMltMatnp(float *mat_a, float *mat_b, float *out, size_t m, size_t n, size_t p, size_t count) {
+void matmnMltMatnp(const float *mat_a, const float *mat_b, float *out, size_t m, size_t n, size_t p, size_t count) {
     matmn(m, p, temp);
     for(size_t c = 0; c < count; c++, out += m * p, mat_a += m * n) {
         for(size_t i = 0; i < m; i++) {
@@ -61,9 +61,9 @@ void matmnMltMatnp(float *mat_a, float *mat_b, float *out, size_t m, size_t n, s
     }
 }
 
-void mat2Mlt(mat2 mat_a, mat2 mat_b, mat2 out, size_t count) { matmnMltMatnp(marr(mat_a), marr(mat_b), marr(out), 2, 2, 2, count); }
-void mat3Mlt(mat3 mat_a, mat3 mat_b, mat3 out, size_t count) { matmnMltMatnp(marr(mat_a), marr(mat_b), marr(out), 3, 3, 3, count); }
-void mat4Mlt(mat4 mat_a, mat4 mat_b, mat4 out, size_t count) { matmnMltMatnp(marr(mat_a), marr(mat_b), marr(out), 4, 4, 4, count); }
+void mat2Mlt(const mat2 mat_a, const mat2 mat_b, mat2 out, size_t count) { matmnMltMatnp(marr(mat_a), marr(mat_b), marr(out), 2, 2, 2, count); }
+void mat3Mlt(const mat3 mat_a, const mat3 mat_b, mat3 out, size_t count) { matmnMltMatnp(marr(mat_a), marr(mat_b), marr(out), 3, 3, 3, count); }
+void mat4Mlt(const mat4 mat_a, const mat4 mat_b, mat4 out, size_t count) { matmnMltMatnp(marr(mat_a), marr(mat_b), marr(out), 4, 4, 4, count); }
 
 #define matnMltVecBdy(mat, vec, out, n, count) \
     vec3 temp; \
@@ -77,9 +77,9 @@ void mat4Mlt(mat4 mat_a, mat4 mat_b, mat4 out, size_t count) { matmnMltMatnp(mar
         } \
     }
 
-void mat2MltVec(mat2 mat, vec2 vec, vec2 out, size_t count) { matnMltVecBdy(mat, vec, out, 2, count) }
-void mat3MltVec(mat3 mat, vec3 vec, vec3 out, size_t count) { matnMltVecBdy(mat, vec, out, 3, count) }
-void mat4MltVec(mat4 mat, vec4 vec, vec4 out, size_t count) { matnMltVecBdy(mat, vec, out, 4, count) }
+void mat2MltVec(const mat2 mat, const vec2 vec, vec2 out, size_t count) { matnMltVecBdy(mat, vec, out, 2, count) }
+void mat3MltVec(const mat3 mat, const vec3 vec, vec3 out, size_t count) { matnMltVecBdy(mat, vec, out, 3, count) }
+void mat4MltVec(const mat4 mat, const vec4 vec, vec4 out, size_t count) { matnMltVecBdy(mat, vec, out, 4, count) }
 
 #define matnTransposeBdy(mat, out, n, count) \
     float temp; \
@@ -94,11 +94,11 @@ void mat4MltVec(mat4 mat, vec4 vec, vec4 out, size_t count) { matnMltVecBdy(mat,
         } \
     }
 
-void mat2Transpose(mat2 mat, mat2 out, size_t count) { matnTransposeBdy(mat, out, 2, count) }
-void mat3Transpose(mat3 mat, mat3 out, size_t count) { matnTransposeBdy(mat, out, 3, count) }
-void mat4Transpose(mat4 mat, mat4 out, size_t count) { matnTransposeBdy(mat, out, 4, count) }
+void mat2Transpose(const mat2 mat, mat2 out, size_t count) { matnTransposeBdy(mat, out, 2, count) }
+void mat3Transpose(const mat3 mat, mat3 out, size_t count) { matnTransposeBdy(mat, out, 3, count) }
+void mat4Transpose(const mat4 mat, mat4 out, size_t count) { matnTransposeBdy(mat, out, 4, count) }
 
-void printMatmn(float *mat, size_t m, size_t n, size_t count) {
+void printMatmn(const float *mat, size_t m, size_t n, size_t count) {
     for(size_t c = 0; c < count; c++, mat += m * n) {
         for(size_t i = 0; i < m; i++) {
             for(size_t j = 0; j < n; j++) {
@@ -110,6 +110,6 @@ void printMatmn(float *mat, size_t m, size_t n, size_t count) {
     }
 }
 
-void printMat2(mat2 mat, size_t count) { printMatmn(marr(mat), 2, 2, count); }
-void printMat3(mat3 mat, size_t count) { printMatmn(marr(mat), 3, 3, count); }
-void printMat4(mat4 mat, size_t count) { printMatmn(marr(mat), 4, 4, count); }
+void printMat2(const mat2 mat, size_t count) { printMatmn(marr(mat), 2, 2, count); }
+void printMat3(const mat3 mat, size_t count) { printMatmn(marr(mat), 3, 3, count); }
+void printMat4(const mat4 mat, size_t count) { printMatmn(marr(mat), 4, 4, count); }

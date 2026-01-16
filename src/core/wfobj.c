@@ -57,7 +57,7 @@ void closeVec3List(Vec3List *list) {
     free(list->data);
 }
 
-int addVec3ToList(Vec3List *list, vec3 vec) {
+int addVec3ToList(Vec3List *list, const vec3 vec) {
     if(list->count == list->size && extendVec3List(list) == -1) {
         return -1;
     }
@@ -111,7 +111,7 @@ int readNorm(FILE *fptr, OBJReader *reader) {
     return addVec3ToList(&reader->norms, vec) == -1? EOF : 1;
 }
 
-int addFace(OBJReader *reader, int vec[3], int norm[3]) {
+int addFace(OBJReader *reader, const int vec[3], const int norm[3]) {
     for(int i = 0; i < 3; i++) {
         if(addVec3ToList(&reader->faces, reader->vecs.data[vec[i] - 1])) {
             return EOF;

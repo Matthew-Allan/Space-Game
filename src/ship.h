@@ -28,9 +28,9 @@ typedef struct ShipData {
 
 void applyVelocity(ShipData *ship);
 
-void applyForce(ShipData *ship, vec3 force);
+void applyForce(ShipData *ship, const vec3 force);
 
-void shipThrust(ShipData *ship, vec3 direction, float magnitude);
+void shipThrust(ShipData *ship, const vec3 direction, float magnitude);
 
 void handleInput(ShipData *ship, SHIP_Flags flags, uint64_t delta_time);
 

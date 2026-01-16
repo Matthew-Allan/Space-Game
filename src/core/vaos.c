@@ -6,7 +6,7 @@
 #include "wfobj.h"
 
 // Set up a vertex array object that the game board should be rendered on.
-void setupVAO(VertexArrObj *VAO, float *verts, size_t verts_size, GLuint *inds, size_t inds_size, GLsizei face_cnt) {
+void setupVAO(VertexArrObj *VAO, const float *verts, size_t verts_size, const GLuint *inds, size_t inds_size, GLsizei face_cnt) {
     // Generate a vertex array object.
     glGenVertexArrays(1, &VAO->id);
     glBindVertexArray(VAO->id);
@@ -28,15 +28,6 @@ void setupVAO(VertexArrObj *VAO, float *verts, size_t verts_size, GLuint *inds, 
     VAO->faces = face_cnt;
 }
 
-int loadVAOs(VertexArrObj *station_VAOs, const char **paths, size_t count) {
-    for(size_t i = 0; i < count; i++) {
-        if(loadVAO(&station_VAOs[i], paths[i]) == -1) {
-            return -1;
-        }
-    }
-    return 0;
-}
-
 int loadVAO(VertexArrObj *station_VAO, const char *path) {
     size_t size, faces;
     float *geom = loadObjectData(path, WF_OBJ_HAS_NORMS, &size, &faces);
@@ -56,12 +47,21 @@ int loadVAO(VertexArrObj *station_VAO, const char *path) {
     return 0;
 }
 
-void drawVAO(VertexArrObj *VAO) {
+int loadVAOs(VertexArrObj *station_VAOs, const char **paths, size_t count) {
+    for(size_t i = 0; i < count; i++) {
+        if(loadVAO(&station_VAOs[i], paths[i]) == -1) {
+            return -1;
+        }
+    }
+    return 0;
+}
+
+void drawVAO(const VertexArrObj *VAO) {
     glBindVertexArray(VAO->id);
     glDrawArrays(GL_TRIANGLES, 0, VAO->faces * 3);
 }
 
-void drawVAOInstanced(VertexArrObj *VAO, size_t count) {
+void drawVAOInstanced(const VertexArrObj *VAO, size_t count) {
     glBindVertexArray(VAO->id);
     glDrawArraysInstanced(GL_TRIANGLES, 0, VAO->faces * 3, count);
 }

@@ -2,12 +2,12 @@
 
 #include <stddef.h>
 
-void initCam(Camera *cam, vec3 pos) {
+void initCam(Camera *cam, const vec3 pos) {
     cam->fov = M_PI_4;
     initTrans(&cam->trans, pos, NULL);
 }
 
-void uploadCamMat(Camera *cam, GLuint camLoc, float aspect) {
+void uploadCamMat(const Camera *cam, GLuint camLoc, float aspect) {
     mat4 cam_mat;
     invTransMat(&cam->trans, cam_mat);
 

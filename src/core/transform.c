@@ -2,7 +2,7 @@
 
 #include <stdlib.h>
 
-void transComponents(Transform *trans, quaternion rot, vec3 disp) {
+void transComponents(const Transform *trans, quaternion rot, vec3 disp) {
     quaternion parent_rot = vec4(0, 0, 0, 1);
     vec3 parent_disp = vec3(0, 0, 0);
     if(trans->parent != NULL) {
@@ -13,7 +13,7 @@ void transComponents(Transform *trans, quaternion rot, vec3 disp) {
     quatMlt(parent_rot, trans->orientation, rot);
 }
 
-void outputMat(mat3 rot, vec3 disp, mat4 mat) {
+void outputMat(const mat3 rot, const vec3 disp, mat4 mat) {
     cpyVec3(rot[matI], mat[matI]);
     cpyVec3(rot[matJ], mat[matJ]);
     cpyVec3(rot[matK], mat[matK]);
@@ -26,7 +26,7 @@ void outputMat(mat3 rot, vec3 disp, mat4 mat) {
     mat[matL][vecW] = 1;
 }
 
-void invTransMat(Transform *trans, mat4 mat) {
+void invTransMat(const Transform *trans, mat4 mat) {
     quaternion rotation; vec3 displacement;
     transComponents(trans, rotation, displacement);
     quatConj(rotation, rotation);
@@ -40,7 +40,7 @@ void invTransMat(Transform *trans, mat4 mat) {
     outputMat(rot_mat, displacement, mat);
 }
 
-void transMat(Transform *trans, mat4 mat) {
+void transMat(const Transform *trans, mat4 mat) {
     quaternion rotation; vec3 displacement;
     transComponents(trans, rotation, displacement);
 
@@ -50,19 +50,19 @@ void transMat(Transform *trans, mat4 mat) {
     outputMat(rot_mat, displacement, mat);
 }
 
-void initTrans(Transform *trans, const vec3 offset, Transform *parent) {
+void initTrans(Transform *trans, const vec3 offset, const Transform *parent) {
     cpyVec3(offset, trans->offset);
     trans->parent = parent;
     setVec4(trans->orientation, 0, 0, 0, 1);
 }
 
-void uploadTransMat(Transform *trans, GLuint modelLoc) {
+void uploadTransMat(const Transform *trans, GLuint modelLoc) {
     mat4 model;
     transMat(trans, model);
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, marr(model));
 }
 
-void parentTrans(Transform *trans, Transform *parent) {
+void parentTrans(Transform *trans, const Transform *parent) {
     trans->parent = parent;
 }
 
