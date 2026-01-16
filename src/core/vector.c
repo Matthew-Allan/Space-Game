@@ -115,7 +115,7 @@ void setVec4(vec4 vec, float x, float y, float z, float w) {
     }
 
 void cpyVec2(vec2 src, vec2 dst) { cpyVecxBdy(2, src, dst) }
-void cpyVec3(vec3 src, vec3 dst) { cpyVecxBdy(3, src, dst) }
+void cpyVec3(const vec3 src, vec3 dst) { cpyVecxBdy(3, src, dst) }
 void cpyVec4(vec4 src, vec4 dst) { cpyVecxBdy(4, src, dst) }
 
 #define printVecxBdy(x, vec, count) \

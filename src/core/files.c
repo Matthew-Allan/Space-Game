@@ -1,9 +1,20 @@
+#include "files.h"
+
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
 
 #ifdef __APPLE__
 #include <CoreFoundation/CoreFoundation.h>
+
+#elif defined(_WIN32)
+
+#include <windows.h>
+
+#else 
+
+#error "Unsupported Operating system (files.c)"
+
 #endif
 
 // Add the relative part to the path.
@@ -41,16 +52,26 @@ int catAbsPart(char *path, size_t max_len) {
     }
 
     strcat(path, "/");
-    #else 
-    
-    #error "Unsupported Operating system (files.c)"
+
+
+    #elif defined(_WIN32)
+
+    if(GetModuleFileNameA(NULL, path, max_len) == 0) {
+        return -1;
+    }
+
+    char *last_slash = strrchr(path, '\\');
+    if(last_slash != NULL) {
+        *(last_slash + 1) = '\0';
+    }
+
     #endif
 
     return 0;
 }
 
 // Get the absolute path of the app and add the path value to it.
-void *getPath(const char *path) {
+char *getPath(const char *path) {
     // Allocate memory for the path.
     char *abs_path = malloc(PATH_MAX);
     if(abs_path == NULL) {
@@ -78,7 +99,7 @@ void *getPath(const char *path) {
 // Open the file given a relative or absolute path.
 FILE *openFile(const char *rel) {
     char *abs_path = getPath(rel);
-    FILE *file = fopen(abs_path, "r");
+    FILE *file = fopen(abs_path, "rb");
     free(abs_path);
     return file;
 }

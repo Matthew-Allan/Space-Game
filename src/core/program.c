@@ -1,5 +1,7 @@
 #include "program.h"
 
+#include <stdio.h>
+
 // Create an SDL window and an OpenGL context.
 SDL_Window *createWindow() {
     // Init SDL.

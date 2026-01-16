@@ -1,40 +1,76 @@
-# General.
-CORE_FILES = camera files matrix program quaternion shader transform vector vaos wfobj
-APP_FILES = beltshad main objectshad ship
-FILES = $(foreach file,$(APP_FILES) $(foreach core_file,$(CORE_FILES), core/$(core_file)) glad/glad, src/$(file).c)
-ARGS = -fdiagnostics-color=always -g -Wall -Werror -framework CoreFoundation
-INCLUDES = -Iinclude -lSDL2
-PROG_NAME = SpaceGame
-PROG_VER = 0.0
-BUNDLE_VER = 1
-OUT = out
-ASSETS = assets
-SHADERS = $(ASSETS)/shaders
-MODELS = $(ASSETS)/models
-PROG_LOC = $(OUT)/$(PROG_NAME)
+# Program info.
+PROG_NAME := SpaceGame
+PROG_NAME_LC  := $(shell echo $(PROG_NAME) | tr A-Z a-z)
 
-# For MAC.
-APP = $(OUT)/$(PROG_NAME).app
-APP_CONTENTS = $(APP)/Contents
-APP_RESOURCES = $(APP_CONTENTS)/Resources
-APP_FRAMEWORKS = $(APP_CONTENTS)/Frameworks
-APP_MAC_OS = $(APP_CONTENTS)/MacOS
-BUNDLE_ID = com.suityourselfgames.spacegame
-SOURCE_ICON = $(ASSETS)/Icon1024.png
-ICON_NAME = Icon
-ICON_SET = $(ICON_NAME).iconset
-ICON = $(ICON_NAME).icns
-SUBS = -e 's:PROG_NAME:$(PROG_NAME):' -e 's:BUNDLE_ID:$(BUNDLE_ID):' -e 's:BUNDLE_VER:$(BUNDLE_VER):' -e 's:PROG_VER:$(PROG_VER):' -e 's:ICON_FILE:$(ICON):'
+PROG_VER := 0.0
+BUNDLE_VER := 1
+
+BUNDLE_ID := com.suityourselfgames.$(PROG_NAME_LC)
+
+# Folder structure.
+OUT := out
+ASSETS := assets
+SHADERS := $(ASSETS)/shaders
+MODELS := $(ASSETS)/models
+PROG_LOC := $(OUT)/$(PROG_NAME)
+SOURCE_ICON := $(ASSETS)/Icon1024.png
+
+# Source files / arguments.
+CORE_FILES := camera files matrix program quaternion shader transform vector vaos wfobj
+APP_FILES := beltshad main objectshad ship
+FILES := $(foreach file,$(APP_FILES) $(foreach core_file,$(CORE_FILES), core/$(core_file)) glad/glad, src/$(file).c)
+GEN_ARGS := -fdiagnostics-color=always -g -Wall -Werror -Iinclude -lSDL2
+
+#OS specifics.
+UNAME_S := $(shell uname -s)
+
+ifeq ($(UNAME_S),Darwin)
+
+# General vals.
+OS := MAC
+BUILD_RES := build-res/MacOS
+ARGS := $(GEN_ARGS) -framework CoreFoundation
+
+# .app package folders.
+APP := $(OUT)/$(PROG_NAME).app
+APP_CONTENTS := $(APP)/Contents
+APP_RESOURCES := $(APP_CONTENTS)/Resources
+APP_FRAMEWORKS := $(APP_CONTENTS)/Frameworks
+APP_MAC_OS := $(APP_CONTENTS)/MacOS
+
+# Icon vals.
+ICON_NAME := Icon
+ICON_SET := $(ICON_NAME).iconset
+ICON := $(ICON_NAME).icns
+
+# Substitutions for Info.plist.
+SUBS := -e 's:PROG_NAME:$(PROG_NAME):' -e 's:BUNDLE_ID:$(BUNDLE_ID):' -e 's:BUNDLE_VER:$(BUNDLE_VER):' -e 's:PROG_VER:$(PROG_VER):' -e 's:ICON_FILE:$(ICON):'
+
+else ifeq ($(OS),Windows_NT)
+
+# General vals.
+OS := WIN
+BUILD_RES := build-res/Windows
+ARGS := $(GEN_ARGS) -L$(BUILD_RES)/lib
+
+else
+
+$(error "Unsupported Operating system");
+
+endif
 
 # Build and run the executable.
 all: build run
 
 # Build the executable.
-build:
+build: clean
 	mkdir -p $(OUT)
 	ln -sf ../assets/shaders $(OUT)/
 	ln -sf ../assets/models $(OUT)/
-	gcc $(ARGS) $(INCLUDES) $(FILES) -o $(PROG_LOC)
+ifeq ($(OS),WIN)
+	cp $(BUILD_RES)/SDL2.dll $(OUT)/SDL2.dll
+endif
+	gcc $(FILES) $(ARGS) -o $(PROG_LOC)
 
 # Run the program.
 run:
@@ -50,14 +86,16 @@ mac: clean build
 	mkdir -p $(APP_RESOURCES)
 	mkdir $(APP_MAC_OS)
 	mkdir $(APP_FRAMEWORKS)
+
 # Place files in the package.
-	cp MacOS/libSDL2-2.0.0.dylib $(APP_FRAMEWORKS)/libSDL2-2.0.0.dylib
-	cp MacOS/Info.plist $(APP_CONTENTS)/Info.plist
-	sed $(SUBS) MacOS/Info.plist > $(APP_CONTENTS)/Info.plist
-	cp MacOS/Icon.icns $(APP_RESOURCES)/$(ICON)
+	cp $(BUILD_RES)/libSDL2-2.0.0.dylib $(APP_FRAMEWORKS)/libSDL2-2.0.0.dylib
+	cp $(BUILD_RES)/Info.plist $(APP_CONTENTS)/Info.plist
+	sed $(SUBS) $(BUILD_RES)/Info.plist > $(APP_CONTENTS)/Info.plist
+	cp $(BUILD_RES)/Icon.icns $(APP_RESOURCES)/$(ICON)
 	cp -R $(SHADERS) $(APP_RESOURCES)/shaders
 	cp -R $(MODELS) $(APP_RESOURCES)/models
 	cp $(PROG_LOC) $(APP_MAC_OS)/$(PROG_NAME)
+
 # Set the program to look in the apps frameworks instead of the pcs frameworks.
 # Probably weird and not suggested :/. Only an issue if it doesn't work on another computer.
 	install_name_tool -change $(shell brew --prefix sdl2)/lib/libSDL2-2.0.0.dylib @executable_path/../Frameworks/libSDL2-2.0.0.dylib $(APP_MAC_OS)/$(PROG_NAME)
@@ -79,5 +117,5 @@ icns:
 	sips -z 512 512   $(SOURCE_ICON) --out $(ICON_SET)/icon_256x256@2x.png
 	sips -z 512 512   $(SOURCE_ICON) --out $(ICON_SET)/icon_512x512.png
 	cp $(SOURCE_ICON) $(ICON_SET)/icon_512x512@2x.png
-	iconutil -c icns $(ICON_SET) -o MacOS/$(ICON)
+	iconutil -c icns $(ICON_SET) -o $(BUILD_RES)/$(ICON)
 	rm -r $(ICON_SET)
