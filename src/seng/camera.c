@@ -1,4 +1,4 @@
-#include "camera.h"
+#include <seng/camera.h>
 
 #include <stddef.h>
 

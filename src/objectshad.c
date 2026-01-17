@@ -2,7 +2,7 @@
 
 #include <stddef.h>
 
-#include "core/shader.h"
+#include <seng/shader.h>
 
 int buildObjectShader(ObjectShader *shader) {
     if(buildShader(&shader->program, VERT_SHADER_PATH, FRAG_SHADER_PATH, NULL) == -1) {

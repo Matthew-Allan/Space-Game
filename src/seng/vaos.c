@@ -1,9 +1,9 @@
-#include "vaos.h"
+#include <seng/vaos.h>
 
 #include <stddef.h>
 #include <stdlib.h>
 
-#include "wfobj.h"
+#include <seng/wfobj.h>
 
 // Set up a vertex array object that the game board should be rendered on.
 void setupVAO(VertexArrObj *VAO, const float *verts, size_t verts_size, const GLuint *inds, size_t inds_size, GLsizei face_cnt) {

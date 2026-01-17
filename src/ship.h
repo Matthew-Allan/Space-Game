@@ -1,7 +1,7 @@
 #ifndef SHIP_H
 #define SHIP_H
 
-#include "core/transform.h"
+#include <seng/transform.h>
 
 #define FLAG_MODULE_NAME SHIP
 
@@ -19,7 +19,7 @@
     FLAG_ELEMENT(ROLL_RIGHT) \
     FLAG_ELEMENT(ROLL_LEFT)
 
-#include "core/flags.h"
+#include <seng/flags.h>
 
 typedef struct ShipData {
     Transform trans;

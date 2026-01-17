@@ -1,4 +1,4 @@
-#include "quaternion.h"
+#include <seng/quaternion.h>
 
 #define Q(q, a) ((q)[vec ## a])
 

@@ -1,6 +1,6 @@
-#include "wfobj.h"
-#include "files.h"
-#include "vector.h"
+#include <seng/wfobj.h>
+#include <seng/files.h>
+#include <seng/vector.h>
 
 #include <stdio.h>
 #include <errno.h>

@@ -1,9 +1,9 @@
-#include "shader.h"
+#include <seng/shader.h>
 
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "files.h"
+#include <seng/files.h>
 
 // Compile a shader at a given path.
 int compileShader(const char *path, GLenum shader_type, GLuint *shader) {

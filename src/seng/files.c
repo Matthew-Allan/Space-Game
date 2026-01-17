@@ -1,4 +1,4 @@
-#include "files.h"
+#include <seng/files.h>
 
 #include <stdlib.h>
 #include <errno.h>

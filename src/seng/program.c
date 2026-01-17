@@ -1,4 +1,4 @@
-#include "program.h"
+#include <seng/program.h>
 
 #include <stdio.h>
 

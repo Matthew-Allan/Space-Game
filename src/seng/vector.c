@@ -1,4 +1,4 @@
-#include "vector.h"
+#include <seng/vector.h>
 
 #include <math.h>
 #include <stdio.h>

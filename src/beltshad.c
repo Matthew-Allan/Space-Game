@@ -2,7 +2,7 @@
 
 #include <stddef.h>
 
-#include "core/shader.h"
+#include <seng/shader.h>
 
 int buildBeltShader(BeltShader *shader) {
     if(buildShader(&shader->program, BLT_VERT_SHADER_PATH, BLT_FRAG_SHADER_PATH, NULL) == -1) {

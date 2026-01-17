@@ -1,4 +1,4 @@
-#include "matrix.h"
+#include <seng/matrix.h>
 
 #include <stdio.h>
 

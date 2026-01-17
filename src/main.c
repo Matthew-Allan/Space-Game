@@ -1,9 +1,9 @@
-#include "core/program.h"
-#include "core/shader.h"
-#include "core/camera.h"
-#include "core/quaternion.h"
-#include "core/vaos.h"
-#include "core/flags.h"
+#include <seng/program.h>
+#include <seng/shader.h>
+#include <seng/camera.h>
+#include <seng/quaternion.h>
+#include <seng/vaos.h>
+#include <seng/flags.h>
 
 #include "objectshad.h"
 #include "beltshad.h"
