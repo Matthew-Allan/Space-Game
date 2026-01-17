@@ -14,11 +14,12 @@ SHADERS := $(ASSETS)/shaders
 MODELS := $(ASSETS)/models
 PROG_LOC := $(OUT)/$(PROG_NAME)
 SOURCE_ICON := $(ASSETS)/Icon1024.png
+ENGINE_CORE := seng
 
 # Source files / arguments.
 CORE_FILES := camera files matrix program quaternion shader transform vector vaos wfobj
 APP_FILES := beltshad main objectshad ship
-FILES := $(foreach file,$(APP_FILES) $(foreach core_file,$(CORE_FILES), core/$(core_file)) glad/glad, src/$(file).c)
+FILES := $(foreach file,$(APP_FILES) $(foreach core_file,$(CORE_FILES), $(ENGINE_CORE)/$(core_file)) glad/glad, src/$(file).c)
 GEN_ARGS := -fdiagnostics-color=always -g -Wall -Werror -Iinclude -lSDL2
 
 #OS specifics.

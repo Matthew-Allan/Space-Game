@@ -73,7 +73,7 @@ int runGame(Program *program) {
     initTrans(&planet, ORIGIN_VEC, NULL);
 
     ShipData ship;
-    initShip(&ship);
+    initShip(&ship, (vec3){300, 20, 0});
     parentTrans(&cam.trans, &ship.trans);
 
     VertexArrObj vaos[obj_count];
@@ -103,7 +103,7 @@ int runGame(Program *program) {
         
         // Draw planet.
         uploadTransMat(&planet, obj_shader.model);
-        drawVAO(&vaos[OBJ_Monkey]);
+        drawVAO(&vaos[OBJ_SpaceStation]);
 
         // Draw asteroids.
         glUseProgram(belt_shader.program);

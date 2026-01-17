@@ -34,6 +34,6 @@ void shipThrust(ShipData *ship, const vec3 direction, float magnitude);
 
 void handleInput(ShipData *ship, SHIP_Flags flags, uint64_t delta_time);
 
-void initShip(ShipData *ship);
+void initShip(ShipData *ship, const vec3 pos);
 
 #endif

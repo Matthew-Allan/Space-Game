@@ -58,7 +58,7 @@ void handleInput(ShipData *ship, SHIP_Flags flags, uint64_t delta_time) {
     }
 }
 
-void initShip(ShipData *ship) {
-    initTrans(&ship->trans, ORIGIN_VEC, NULL);
+void initShip(ShipData *ship, const vec3 pos) {
+    initTrans(&ship->trans, pos, NULL);
     setVec3(ship->velocity, 0, 0, 0);
 }
